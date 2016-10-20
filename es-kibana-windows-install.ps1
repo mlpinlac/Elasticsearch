@@ -55,6 +55,7 @@ Param(
     [Parameter(Mandatory=$true)][string]$elasticSearchVersion,
     [string]$jdkDownloadLocation,
 	[string]$elasticSearchBaseFolder,
+	[string]$kibanaBaseFolder,
     [string]$discoveryEndpoints,
 	[string]$elasticClusterName,
     [string]$storageKey,
@@ -242,7 +243,7 @@ function Download-Kibana
         [string]$targetDrive
     )
 	
-	# download ElasticSearch from a given source URL to destination folder
+	# download  Kibana from a given source URL to destination folder
 	try{
 			$sourcek = if ($elasticVersion -match '2.4.0') 
 			{"https://download.elastic.co/kibana/kibana/kibana-4.6.1-windows-x86.zip"} 
@@ -436,7 +437,7 @@ function ElasticSearch-InstallService($scriptPath)
 
 function Kibana-InstallService($scriptPathk)
 {
-	# Install and start elastic search as a service
+	# Install and start Kibana as a service
 	$kibanaService = (get-service | Where-Object {$_.Name -match "kibana"}).Name
 	if($kibanaService -eq $null) 
     {	
@@ -444,7 +445,7 @@ function Kibana-InstallService($scriptPathk)
         SetEnv-HeapSize
 
         lmsg 'Installing kibana as a service...'
-        cmd.exe /C "$scriptPath install"
+        cmd.exe /C "$scriptPathk install"
         if ($LASTEXITCODE) {
             throw "Command '$scriptPathk': exit code: $LASTEXITCODE"
         }
